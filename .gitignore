@@ -1,0 +1,38 @@
+# Ignore Eclipse specific files and directories
+
+# Ignore all produced target directories except those in dve/common
+target/
+
+# Ignore maven artifacts
+artifacts/
+
+
+# Ignore Maven release related files
+*.releaseBackup
+release.properties
+
+# automatic backup files
+*~
+
+WebContent/
+.repository/
+ISO/targetFilePath
+*\.orig
+*\.back
+ttcn-admin/
+compile 
+.prefs
+.classpath
+.project
+.settings
+
+# ignore intellij project files
+.idea
+*.iml
+
+#Maven backups
+*.versionsBackup
+
+#ignore log files
+*.log
+

@@ -1,0 +1,279 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ericsson</groupId>
+	<artifactId>fpinscala</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>fpinscala</name>
+	<description>fpinscala code examples</description>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<encoding>UTF-8</encoding>
+		<scala.tools.version>2.11</scala.tools.version>
+		<scala.version>2.11.7</scala.version>
+		<akka.version>2.4.0</akka.version>
+		<sonar.language>scala</sonar.language>
+		<additionalparam>-Xdoclint:none</additionalparam>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<artifactId>scala-library</artifactId>
+			<groupId>org.scala-lang</groupId>
+			<version>${scala.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_${scala.tools.version}</artifactId>
+			<version>2.2.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor_${scala.tools.version}</artifactId>
+			<version>${akka.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-actors -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-actors</artifactId>
+			<version>2.11.8</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-parser-combinators -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-parser-combinators</artifactId>
+			<version>2.11.0-M4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.scala-logging</groupId>
+			<artifactId>scala-logging_${scala.tools.version}</artifactId>
+			<version>3.1.0</version>
+			<scope>compile</scope>
+		</dependency>
+
+	</dependencies>
+
+	<!-- ========================================== = The BUILD section ========================================== -->
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<!-- see http://maven.apache.org/plugins/maven-eclipse-plugin/eclipse-mojo.html 
+					for more information -->
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<testSourcesLast>true</testSourcesLast>
+					<projectnatures>
+						<projectnature>org.scala-ide.sdt.core.scalanature</projectnature>
+						<projectnature>org.eclipse.jdt.core.javanature</projectnature>
+						<projectnature>org.eclipse.m2e.core.maven2Nature</projectnature>
+					</projectnatures>
+					<buildcommands>
+						<buildcommand>org.scala-ide.sdt.core.scalabuilder</buildcommand>
+						<buildcommand>org.eclipse.m2e.core.maven2Builder</buildcommand>
+					</buildcommands>
+					<classpathContainers>
+						<classpathContainer>org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER</classpathContainer>
+						<classpathContainer>org.scala-ide.sdt.launching.SCALA_CONTAINER</classpathContainer>
+						<classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+					</classpathContainers>
+					<excludes>
+						<!-- This is a stupid workaround to avoid these deps to be part of 
+							the .classpath file -->
+						<!-- Apparently there is no way to use wildcards to ignore all deps -->
+						<exclude>org.scala-lang:scala-library</exclude>
+						<exclude>org.scala-lang:scala-compiler</exclude>
+						<exclude>junit:junit</exclude>
+						<exclude>com.typesafe.akka:akka-actor_${scala.tools.version}</exclude>
+						<exclude>com.typesafe.akka:akka-remote_${scala.tools.version}</exclude>
+						<exclude>com.typesafe.akka:akka-slf4j_${scala.tools.version}</exclude>
+						<exclude>org.slf4j:slf4j-log4j12</exclude>
+						<exclude>com.typesafe.akka:akka-testkit_${scala.tools.version}</exclude>
+						<exclude>com.typesafe:config</exclude>
+						<exclude>org.hamcrest:hamcrest-core</exclude>
+						<exclude>log4j:log4j</exclude>
+						<exclude>io.netty:netty</exclude>
+						<exclude>com.google.protobuf:protobuf-java</exclude>
+						<exclude>org.scala-lang:scala-reflect</exclude>
+						<exclude>org.scalatest:scalatest_${scala.tools.version}</exclude>
+						<exclude>org.slf4j:slf4j-api</exclude>
+						<exclude>org.uncommons.maths:uncommons-maths</exclude>
+					</excludes>
+					<sourceIncludes>
+						<sourceInclude>**/*.scala</sourceInclude>
+						<sourceInclude>**/*.java</sourceInclude>
+					</sourceIncludes>
+				</configuration>
+			</plugin>
+
+			<!-- Adds src/main/scala and src/test/scala as source folders, from http://groups.google.com/group/liftweb/browse_thread/thread/3dac7002f9e59546/3918bba2f7a92cd3?pli=1 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/main/scala</source>
+								<source>src/main/java</source>
+							</sources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>add-test-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/test/scala</source>
+								<source>src/test/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<!-- see http://davidb.github.com/scala-maven-plugin/example_java.html -->
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<version>3.2.2</version>
+				<executions>
+					<execution>
+						<id>scala-compile-first</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>add-source</goal>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>scala-test-compile</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<args>
+						<arg>-language:postfixOps</arg>
+						<!-- For SLRR test execution, workaround for scalatest bug -->
+						<arg>-no-specialization</arg>
+					</args>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<!--groupId>org.apache.maven.plugins</groupId -->
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<verbose>true</verbose>
+					<encoding>UTF-8</encoding> <!-- Fix for unmappable character for encoding Cp1252 problem -->
+				</configuration>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- disable surefire -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<skipTests>false</skipTests>
+				</configuration>
+			</plugin>
+
+			<!-- enable scalatest -->
+			<plugin>
+				<groupId>org.scalatest</groupId>
+				<artifactId>scalatest-maven-plugin</artifactId>
+				<version>1.0-RC2</version>
+				<configuration>
+					<forkMode>never</forkMode>
+					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+					<junitxml>.</junitxml>
+					<filereports>WDF TestSuite.txt</filereports>
+				</configuration>
+				<executions>
+					<execution>
+						<id>test</id>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<verify>true</verify>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<index>true</index>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<!-- enable scalastyle checking -->
+			<plugin>
+				<groupId>org.scalastyle</groupId>
+				<artifactId>scalastyle-maven-plugin</artifactId>
+				<version>0.4.0</version>
+				<configuration>
+					<verbose>false</verbose>
+					<failOnViolation>true</failOnViolation>
+					<includeTestSourceDirectory>true</includeTestSourceDirectory>
+					<failOnWarning>false</failOnWarning>
+					<sourceDirectory>${basedir}/src/main/scala</sourceDirectory>
+					<testSourceDirectory>${basedir}/src/test/scala</testSourceDirectory>
+					<configLocation>${basedir}/scalastyle_config.xml</configLocation>
+					<outputFile>${project.basedir}/scalastyle-output.xml</outputFile>
+					<outputEncoding>UTF-8</outputEncoding>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -1,0 +1,43 @@
+Cai3gBatch(bf) ::= <<
+<?xml version="1.0" encoding="iso-8859-1"?>
+<CAI3GBH>
+  <config>
+    <url>$bf.URL$</url>
+    <ns>http://schemas.ericsson.com/cai3g1.2/</ns>
+    <user>$bf.user$</user>
+    <passwd>$bf.passwd$</passwd>
+    <resume>yes</resume>
+    <session>1</session>
+  </config>
+  <rules>
+     <responseOK>
+      <code>0</code>
+    </responseOK>
+    <responseRetry>
+      <code>1001|2001|2003</code>
+      <pauseSeconds>5</pauseSeconds>
+      <times>3</times>
+    </responseRetry>
+    <quit>
+      <code>3066</code>
+    </quit>
+  </rules>
+  <Request>
+  $bf.attributes : {subscriberId |
+    <Command>
+		<Operation>$bf.operation$</Operation>
+		<Parameters>
+			<Param name="MOType">SubscriberData@http://schemas.ericsson.com/pg/hlr/13.5/</Param>
+			<Param name="MOId"><![CDATA[<msisdn>$subscriberId$</msisdn>]]></Param>
+		</Parameters>
+	</Command>
+	<Command>
+		<Operation>$bf.operation$</Operation>
+		<Parameters>
+			<Param name="MOType">EPSMultiSC@http://schemas.ericsson.com/ma/HSS/</Param>
+			<Param name="MOId"><![CDATA[<msisdn>$subscriberId$</msisdn>]]></Param>
+		</Parameters>
+	</Command>}$
+  </Request>
+</CAI3GBH>
+>>
